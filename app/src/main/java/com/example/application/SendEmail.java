@@ -47,11 +47,7 @@ public class SendEmail extends AppCompatActivity {
         attachment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                intent.putExtra("return-data", true);
-                startActivityForResult(Intent.createChooser(intent, "Complete action using"), PICK_FROM_GALLERY);
+                openFolder();
             }
         });
     }
@@ -66,7 +62,7 @@ public class SendEmail extends AppCompatActivity {
             columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             attachmentFile = cursor.getString(columnIndex);
             Log.e("Attachment Path:", attachmentFile);
-            URI = Uri.parse("file:" + attachmentFile);
+            URI = Uri.parse("file://" + attachmentFile);
             cursor.close();
         }
     }
@@ -82,16 +78,24 @@ public class SendEmail extends AppCompatActivity {
             emailIntent.setType("plain/text");
             emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL,new String[] { to });
             emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,subject);
-            emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, msg);
             if (URI != null) {
                 emailIntent.putExtra(Intent.EXTRA_STREAM, URI);
             }
+            emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, msg);
             this.startActivity(Intent.createChooser(emailIntent,"Sending email..."));
         }
         catch (Throwable t)
         {
             Toast.makeText(this, "Request failed try again: " + t.toString(),Toast.LENGTH_LONG).show();
         }
+    }
+
+    public void openFolder(){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent.putExtra("return-data", true);
+        startActivityForResult(Intent.createChooser(intent, "Complete action using"), PICK_FROM_GALLERY);
     }
 
 }
