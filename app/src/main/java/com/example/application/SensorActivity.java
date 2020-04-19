@@ -62,7 +62,7 @@ public class SensorActivity extends AppCompatActivity implements SensorEventList
                 public void onSensorChanged(SensorEvent event) {
                     int val = (int) event.values[0];
                     int grayShade = 0;
-                    if (val > 10000) grayShade = 255;
+                    if (val < 10000) grayShade = 255;
                     sensorList.setTextColor(Color.rgb(255 - grayShade, 255 - grayShade, 255 - grayShade));
                     sensorList.setBackgroundColor(Color.rgb(grayShade, grayShade, grayShade));
                     sensorLayout.setBackgroundColor(Color.rgb(grayShade, grayShade, grayShade));
